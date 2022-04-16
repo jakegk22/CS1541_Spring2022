@@ -44,7 +44,7 @@ void *create(void *unused) {
  */
 void *run(void *unused) {
   int accesses = 0;
-  while(true) {
+  while(1) {
     for(int i = 0; i < 30; i++) {
       for(node_t* current = head; current != NULL; current = current->next) {
         current->data[i]++;
