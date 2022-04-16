@@ -108,22 +108,24 @@ CS 1541 Computer Architecture
 
 ## WEEK 14 (Week of 11 APR)
 
-* Class 1: Virtual Memory / TLBs
+* Class 1: Virtual Memory / TLBs / Cache Coherence
 
-* Class 2: Cache Coherence / SIMD
+* Class 2: SIMD / GPU architecture
+
+* Homework 4 released on GradeScope
 
 ## WEEK 15 (Week of 18 APR)
 
-* Class 1: GPU architecture and programming
+* Class 1: GPU programming and performance
 
 * Class 2: Review for Midterm 2
 
-* Homework 4 released on GradeScope
+* Homework 4 due on GradeScope
 
 ## WEEK 16 (Week of 25 APR)
 
 * Midterm 2 on GradeScope: TBD
 
-* Homework 4 due on GradeScope
+* Homework 4 Extra Credit due on GradeScope
 
 * Project 2 due on GradeScope
