@@ -61,7 +61,7 @@ void copy_host_to_device(float* A, int n)
 	gettimeofday (&tv ,   &tz);
 	time_start = (double)tv.tv_sec + (double)tv.tv_usec / 1000000.0;
 
-	cudaMalloc((void**) &d_A, sizeof(float) * n * n);
+	cudaMalloc((void**) &d_A, sizeof(float) * n);
 	assert(d_A);
 	cudaMemcpy(d_A, A, sizeof(float) * n, cudaMemcpyHostToDevice);
 
