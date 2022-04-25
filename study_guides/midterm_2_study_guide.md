@@ -24,19 +24,6 @@ The exam will consist of these types of questions:
 
 Here are the key topics to study in preparation for the test.
 
-## Exceptions
-
-* Be able to define what an exception is
-* Be able to define what a precise exception is
-  * And why it is important
-* Be able to explain why precise exceptions in out-of-order superscalars are difficult
-* Be able to explain how internal state (and out-of-order execution) is hidden from visible state
-  * Registers: through the use of physical registers
-  * Memory: through the use of a store queue
-* Be able to explain what roles the instruction queue and retirement register file have in precise exceptions
-  * Instruction queue: guarantees that instructions commit their state in program order
-  * Retirement register file: holds the current values of architectural registers at all times
-
 ## Memory Hierarchy
 
 * Be able to compare the pros / cons of each memory technology
