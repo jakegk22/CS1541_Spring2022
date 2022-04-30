@@ -126,11 +126,24 @@ WBCache::~WBCache()
 void WBCache::read(MemRequest *mreq)
 {
   // TODO: Implement
-
   // For now, the read always misses and memory request is passed on to
   // lower level memory.  Of course, you'd want to change this behavior. :)
-  readMisses.inc();
-  getLowerLevelMemObj()->access(mreq);
+  uint32_t rplcAddr[10];
+  //take memRequest and check the caches if it is in there
+  if(!cacheCore->accessLine(mreq->getAddr())){ //if Line is null then accessLine could not find the addr in the Cache
+    readMisses.inc();   //miss so increment
+    getLowerLevelMemObj()->access(mreq); //get lowerlevel memory obj 
+    cacheCore->allocateLine(mreq->getAddr(), rplcAddr); //allocate line in cache and pass
+    if(rplcAddr[0]=0)
+      writeBacks.inc();
+  }
+  else{                                                           //else the addr was found in the cache
+    readHits.inc();     //thus we incrment the hits 
+    return;
+  }
+  
+  
+  
 }
 
 void WBCache::write(MemRequest *mreq)
@@ -139,13 +152,37 @@ void WBCache::write(MemRequest *mreq)
 
   // For now, the write always misses and memory request is passed on to
   // lower level memory.  Of course, you'd want to change this behavior. :)
-  writeMisses.inc();
-  getLowerLevelMemObj()->access(mreq);
+  uint32_t rplcAddr[10];
+  if(!cacheCore->accessLine(mreq->getAddr())){
+    writeMisses.inc();
+    getLowerLevelMemObj()->access(mreq);
+    cacheCore->allocateLine(mreq->getAddr(), rplcAddr); //allocate line in cache and pass
+    if(rplcAddr[0]=0)
+      writeBacks.inc();
+  }
+  else{
+    cacheCore->accessLine(mreq->getAddr())->makeDirty();
+    writeHits.inc();
+  }
+  
+  
 }
 
 void WBCache::writeBack(MemRequest *mreq)
 {
   // TODO: Implement
+  uint32_t rplcAddr[10];
+  if(!WBCache::cacheCore->accessLine(mreq->getAddr())){
+    writeMisses.inc();
+    getLowerLevelMemObj()->access(mreq);
+    cacheCore->allocateLine(mreq->getAddr(), rplcAddr); //allocate line in cache and pass
+    if(rplcAddr[0]=0)
+      writeBacks.inc();
+  }
+  else{
+    cacheCore->accessLine(mreq->getAddr())->makeDirty();
+    writeHits.inc();
+  }
 }
 
 // WTCache: Write through cache. Always propagates writes down.
@@ -154,6 +191,8 @@ WTCache::WTCache(const char *name)
 : Cache(name)
 {
   // nothing to do 
+  
+
 }
 
 WTCache::~WTCache()
@@ -167,8 +206,18 @@ void WTCache::read(MemRequest *mreq)
 
   // For now, the read always misses and memory request is passed on to
   // lower level memory.  Of course, you'd want to change this behavior. :)
-  readMisses.inc();
-  getLowerLevelMemObj()->access(mreq);
+  
+  if(!cacheCore->accessLine(mreq->getAddr())){ //if Line is null then accessLine could not find the addr in the Cache
+    readMisses.inc();   //miss so increment
+    getLowerLevelMemObj()->access(mreq); //get lowerlevel memory obj 
+    cacheCore->allocateLine(mreq->getAddr(), NULL); //allocate line in cache and pass
+    writeBacks.inc();
+  }
+  else{                                                           //else the addr was found in the cache
+    readHits.inc();     //thus we incrment the hits 
+    return;
+  }
+  
 }
 
 void WTCache::write(MemRequest *mreq)
@@ -177,8 +226,17 @@ void WTCache::write(MemRequest *mreq)
 
   // For now, the write always misses and memory request is passed on to
   // lower level memory.  Of course, you'd want to change this behavior. :)
-  writeMisses.inc();
-  getLowerLevelMemObj()->access(mreq);
+  
+  if(!cacheCore->accessLine(mreq->getAddr())){
+    writeMisses.inc();
+    getLowerLevelMemObj()->access(mreq);
+    cacheCore->allocateLine(mreq->getAddr(), NULL); //allocate line in cache and pass
+  }
+  else{
+    cacheCore->accessLine(mreq->getAddr())->makeDirty();
+    writeHits.inc();
+  }
+
 }
 
 void WTCache::writeBack(MemRequest *mreq)

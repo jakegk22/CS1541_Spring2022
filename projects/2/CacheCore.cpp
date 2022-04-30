@@ -80,13 +80,14 @@ CacheLine *CacheCore::allocateLine(uint32_t addr, uint32_t *rplcAddr) {
   if(content[indx].isDirty()){       //if Line we are replacing is dirty 
     int rplcLen=0; 
     for(int i=0;i<sizeof(rplcAddr);i++){     //traverse through array
-      if(rplcAddr[i]==NULL)                  //if an open spot exisits add the address of the dirty thing
+      if(rplcAddr[i] = NULL)                  //if an open spot exisits add the address of the dirty thing
         rplcAddr[i]=content[indx].getTag();  //add dirty CacheLine to the rplcAddr
+      
       rplcLen++;
     }
   }
   else{
-    rplcAddr = 0;                    //else replace address DNE 
+    rplcAddr[0] = 0;                    //else replace address DNE 
   }
 
   content[indx].setTag(tag);        //change the old lines tag to the new tag
